@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive GDD: Pharaoh's Legacy Museum Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Visualization & Content Choices: 
+        - Core Loop: Presented as a series of styled text blocks. Goal: Explain cycle. Method: HTML/Tailwind. Interaction: Static visual flow. Justification: Clear, sequential explanation.
+        - Artifact Tiers: Accordion items. Goal: Detail progression. Method: HTML/Tailwind/JS. Interaction: Click to expand. Justification: Organizes dense info.
+        - Monetization: Card-like displays. Goal: Clarify revenue streams. Method: HTML/Tailwind. Interaction: Static display. Justification: Visually distinct items.
+        - Event Types: Detailed text blocks. Goal: Explain event mechanics. Method: HTML/Tailwind. Interaction: Static display. Justification: Clear presentation of complex info.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFAF0; /* floralwhite - warm neutral (similar to amber-50) */
+            color: #4A5568; /* coolGray-700 - main text */
+        }
+        .tab-active {
+            border-color: #D97706; /* amber-600 */
+            color: #D97706; /* amber-600 */
+            font-weight: 600;
+        }
+        .tab-inactive {
+            border-color: transparent;
+            color: #718096; /* coolGray-500 */
+        }
+        .accordion-header {
+            background-color: #FEF3C7; /* amber-100 */
+            color: #92400E; /* amber-800 */
+        }
+        .accordion-header:hover {
+            background-color: #FDE68A; /* amber-200 */
+        }
+        .accordion-content {
+            background-color: #FFFBEB; /* amber-50 */
+            border-left: 4px solid #D97706; /* amber-600 */
+        }
+        .content-section h2 {
+            color: #C05621; /* orange-700 (similar to amber-700) */
+            border-bottom: 2px solid #FDBA74; /* orange-300 (lighter accent) */
+        }
+         .content-section h3 {
+            color: #DD6B20; /* orange-600 */
+        }
+        .card {
+            background-color: white;
+            border-left: 4px solid #38A169; /* green-500 - contrasting accent for monetization */
+        }
+        .button-primary {
+            background-color: #D97706; /* amber-600 */
+            color: white;
+        }
+        .button-primary:hover {
+            background-color: #B45309; /* amber-700 */
+        }
+        .nav-item {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <header class="bg-amber-700 text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <h1 class="text-2xl sm:text-3xl font-bold text-center">Interactive GDD: Pharaoh's Legacy Museum Builder</h1>
+        </div>
+    </header>
+
+    <nav class="bg-amber-50 shadow-md sticky top-[68px] sm:top-[76px] z-40">
+        <div class="container mx-auto px-2 sm:px-4 lg:px-6">
+            <div class="flex flex-wrap justify-center sm:justify-start -mb-px">
+                <button class="nav-item tab-active text-sm sm:text-base px-3 sm:px-4 py-3 border-b-2 font-medium" onclick="showSection('overview')">
+                    <span class="hidden sm:inline">📜 </span>Game Overview
+                </button>
+                <button class="nav-item tab-inactive text-sm sm:text-base px-3 sm:px-4 py-3 border-b-2 font-medium" onclick="showSection('gameplay')">
+                    <span class="hidden sm:inline">⚙️ </span>Gameplay Mechanics
+                </button>
+                <button class="nav-item tab-inactive text-sm sm:text-base px-3 sm:px-4 py-3 border-b-2 font-medium" onclick="showSection('progression')">
+                    <span class="hidden sm:inline">📈 </span>Progression Systems
+                </button>
+                <button class="nav-item tab-inactive text-sm sm:text-base px-3 sm:px-4 py-3 border-b-2 font-medium" onclick="showSection('monetization')">
+                    <span class="hidden sm:inline">💰 </span>Monetization
+                </button>
+                <button class="nav-item tab-inactive text-sm sm:text-base px-3 sm:px-4 py-3 border-b-2 font-medium" onclick="showSection('engagement')">
+                    <span class="hidden sm:inline">🎉 </span>Engagement & Visuals
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <section id="overview" class="content-section space-y-6">
+            <p class="text-lg text-stone-700 leading-relaxed">
+                Welcome to the interactive Game Design Document for "Pharaoh's Legacy: Museum Builder." This application breaks down the core concepts, mechanics, and systems of the proposed Roblox game. Navigate through the tabs to explore different facets of the game design, from the core gameplay loop to player engagement strategies. The aim is to present a comprehensive overview in an easily digestible format.
+            </p>
+            <h2 class="text-2xl font-semibold mb-2 pb-1">Game Concept</h2>
+            <p><strong>Title Ideas:</strong> My Pharaoh's Museum Tycoon or Pharaoh's Legacy: Museum Builder</p>
+            <p><strong>Concept:</strong> Each player builds and manages their own Egyptian museum, starting with a single artifact and expanding to a grand exhibition of 130 unique items, with options for boosts, rebirths, and fair monetization including direct UGC sales and events.</p>
+            
+            <h3 class="text-xl font-semibold mt-4">Core Gameplay Loop</h3>
+            <p class="mb-4">The heart of the game revolves around a satisfying and repeatable cycle:</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+                <div class="bg-amber-100 p-4 rounded-lg shadow">
+                    <div class="text-4xl mb-2">🏛️</div>
+                    <h4 class="font-semibold text-amber-800">1. Display Artifacts</h4>
+                    <p class="text-sm text-amber-700">Place artifacts in your museum.</p>
+                </div>
+                <div class="bg-amber-100 p-4 rounded-lg shadow">
+                    <div class="text-4xl mb-2">🚶‍♀️🚶‍♂️</div>
+                    <h4 class="font-semibold text-amber-800">2. Attract Visitors</h4>
+                    <p class="text-sm text-amber-700">NPCs visit and generate income based on artifact quality and quantity.</p>
+                </div>
+                <div class="bg-amber-100 p-4 rounded-lg shadow">
+                    <div class="text-4xl mb-2">🪙</div>
+                    <h4 class="font-semibold text-amber-800">3. Earn Currency</h4>
+                    <p class="text-sm text-amber-700">Collect in-game currency ("Gold Deben" or "Scarab Coins").</p>
+                </div>
+                <div class="bg-amber-100 p-4 rounded-lg shadow">
+                    <div class="text-4xl mb-2">🛠️</div>
+                    <h4 class="font-semibold text-amber-800">4. Upgrade & Expand</h4>
+                    <p class="text-sm text-amber-700">Use currency to upgrade artifacts, buy new ones, and expand the museum.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="gameplay" class="content-section hidden space-y-6">
+            <p class="text-lg text-stone-700 leading-relaxed">
+                This section delves into the fundamental gameplay systems that define the player experience in "Pharaoh's Legacy: Museum Builder." Discover how players interact with artifacts, expand their museums, and utilize temporary enhancements.
+            </p>
+            <h2 class="text-2xl font-semibold mb-2 pb-1">Artifact System (130 Artifacts)</h2>
+            <p>Artifacts are central to progression. They are tiered, upgradable, and visually evolve.</p>
+
+            <div class="space-y-3">
+                <div class="accordion">
+                    <button class="accordion-header w-full text-left px-4 py-3 rounded-md shadow font-semibold flex justify-between items-center">
+                        Tier 1 (Starter: Artifacts 1-20)
+                        <span class="accordion-icon transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content hidden p-4 mt-1 rounded-md shadow-inner">
+                        <p>Quick to unlock. Focus on common items like pottery shards, simple tools, basic amulets. These provide small but steady income.</p>
+                    </div>
+                </div>
+                <div class="accordion">
+                    <button class="accordion-header w-full text-left px-4 py-3 rounded-md shadow font-semibold flex justify-between items-center">
+                        Tier 2 (Intermediate: Artifacts 21-60)
+                        <span class="accordion-icon transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content hidden p-4 mt-1 rounded-md shadow-inner">
+                        <p>Require more currency and possibly a minimum museum "Star Rating." Examples: more elaborate jewelry, canopic jar replicas, small statues.</p>
+                    </div>
+                </div>
+                <div class="accordion">
+                    <button class="accordion-header w-full text-left px-4 py-3 rounded-md shadow font-semibold flex justify-between items-center">
+                        Tier 3 (Advanced: Artifacts 61-100)
+                         <span class="accordion-icon transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content hidden p-4 mt-1 rounded-md shadow-inner">
+                        <p>Significant currency investment, higher Star Rating needed. Examples: painted coffin lids, model chariots, detailed deity statues.</p>
+                    </div>
+                </div>
+                <div class="accordion">
+                    <button class="accordion-header w-full text-left px-4 py-3 rounded-md shadow font-semibold flex justify-between items-center">
+                        Tier 4 (Master: Artifacts 101-120)
+                         <span class="accordion-icon transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content hidden p-4 mt-1 rounded-md shadow-inner">
+                        <p>Very expensive, require a high Star Rating and perhaps completion of certain "collections." Examples: replica thrones, large sphinx models, detailed tomb wall scenes.</p>
+                    </div>
+                </div>
+                 <div class="accordion">
+                    <button class="accordion-header w-full text-left px-4 py-3 rounded-md shadow font-semibold flex justify-between items-center">
+                        Tier 5 (Legendary: Artifacts 121-130)
+                         <span class="accordion-icon transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content hidden p-4 mt-1 rounded-md shadow-inner">
+                        <p>Extremely difficult to obtain. May require "Rebirth" currency or achieving specific milestones. These are the ultimate showpieces, like a Pharaoh's death mask replica or a large, intricate diorama.</p>
+                    </div>
+                </div>
+            </div>
+            <p><strong>Unlocking Cost Curve:</strong> The cost to unlock and upgrade artifacts increases exponentially.</p>
+            <p><strong>Visual Appeal:</strong> Each artifact is a distinct 3D model, visually improving with upgrades (e.g., "Dusty Pottery Shard" to "Restored Painted Pot").</p>
+
+            <h3 class="text-xl font-semibold mt-4">Museum Expansion & Star Rating</h3>
+            <ul class="list-disc list-inside space-y-1 pl-4">
+                <li><strong>Building:</strong> Purchase floor tiles, walls, doorways, and themed rooms (e.g., "The Sarcophagus Chamber," "Jewelry Hall").</li>
+                <li><strong>Decorations:</strong> Purchase ropes, display cases, lighting, plants, hieroglyphic wall decals.</li>
+                <li><strong>Star Rating:</strong> Increases based on number/total value/level of artifacts, and museum size/decoration. Higher Star Ratings unlock higher-tier artifacts and provide passive income boosts.</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold mt-4">Boosts (Temporary Enhancements - Developer Products)</h3>
+             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-amber-50 p-4 rounded-lg shadow border-l-4 border-amber-500">
+                    <h4 class="font-semibold text-amber-700">"Visitor Rush"</h4>
+                    <p class="text-sm">Doubles visitor rate or income for 2-5 mins. Obtained via daily login or Robux.</p>
+                </div>
+                <div class="bg-amber-50 p-4 rounded-lg shadow border-l-4 border-amber-500">
+                    <h4 class="font-semibold text-amber-700">"Artifact Polish"</h4>
+                    <p class="text-sm">All artifacts generate +X% income for 10-30 mins. Obtained via quests or Robux.</p>
+                </div>
+                <div class="bg-amber-50 p-4 rounded-lg shadow border-l-4 border-amber-500">
+                    <h4 class="font-semibold text-amber-700">"Instant Build"</h4>
+                    <p class="text-sm">Instantly completes construction or upgrades. Obtained via rare drops or Robux.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="progression" class="content-section hidden space-y-6">
+             <p class="text-lg text-stone-700 leading-relaxed">
+                Long-term player investment is encouraged through systems like Ascension (Rebirth). This section explains how players can reset progress for powerful permanent bonuses and unlock unique content.
+            </p>
+            <h2 class="text-2xl font-semibold mb-2 pb-1">Ascension / Rebirth ("Become a Legend" Mechanic)</h2>
+            <p>Once players reach a significant milestone (e.g., unlocking 100 artifacts or achieving a 5-star museum), they can "Rebirth."</p>
+            <ul class="list-disc list-inside space-y-1 pl-4">
+                <li>Player's museum, currency, and most artifacts reset.</li>
+                <li>Earn a permanent "Legacy Bonus" (e.g., +50% income generation). Stacks with diminishing returns.</li>
+                <li>Earn "Ancient Gem" currency.</li>
+            </ul>
+            <h3 class="text-xl font-semibold mt-4">Ancient Gems (Rebirth Currency)</h3>
+            <ul class="list-disc list-inside space-y-1 pl-4">
+                <li>Used to unlock exclusive "Legendary" artifacts (final 10-20).</li>
+                <li>Used to purchase powerful permanent global upgrades (e.g., "All pedestals start at Level 3").</li>
+                <li>Cannot be bought directly with Robux.</li>
+            </ul>
+        </section>
+
+        <section id="monetization" class="content-section hidden space-y-6">
+            <p class="text-lg text-stone-700 leading-relaxed">
+                The game employs a non-aggressive monetization strategy focusing on optional purchases that enhance the experience or offer cosmetic value. This section outlines the different ways players can support the game.
+            </p>
+            <h2 class="text-2xl font-semibold mb-2 pb-1">Monetization Strategy</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card p-4 rounded-lg shadow">
+                    <h3 class="text-xl font-semibold text-green-700 mb-2">Game Passes (Permanent Perks)</h3>
+                    <ul class="list-disc list-inside space-y-1 text-sm">
+                        <li><strong>"VIP Pass":</strong> +25% income, unique chat tag, exclusive daily reward.</li>
+                        <li><strong>"Extra Pedestals":</strong> Unlocks 2-3 additional artifact display pedestals early.</li>
+                        <li><strong>"Auto-Collector Bot":</strong> Cosmetic pet that auto-collects currency.</li>
+                    </ul>
+                </div>
+                <div class="card p-4 rounded-lg shadow">
+                    <h3 class="text-xl font-semibold text-green-700 mb-2">Developer Products (Consumables)</h3>
+                    <ul class="list-disc list-inside space-y-1 text-sm">
+                        <li><strong>Boosts:</strong> "Visitor Rush," "Artifact Polish," "Instant Build."</li>
+                        <li><strong>Currency Packs (Optional):</strong> For "Gold Deben" or "Scarab Coins" - catch-up mechanic.</li>
+                    </ul>
+                </div>
+                <div class="card p-4 rounded-lg shadow">
+                    <h3 class="text-xl font-semibold text-green-700 mb-2">UGC Avatar Items for Robux</h3>
+                    <p class="text-sm">Themed User Generated Content for players' Roblox avatars (e.g., Pharaoh's Nemes, Anubis Mask). Purchased via avatar shop, promoted in-game.</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow">
+                    <h3 class="text-xl font-semibold text-green-700 mb-2">Cosmetic Items (In-Game Only)</h3>
+                    <p class="text-sm">Special museum decoration packs (e.g., "Royal Theme Pack") purchasable with in-game currency or a small amount of Robux.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="engagement" class="content-section hidden space-y-6">
+             <p class="text-lg text-stone-700 leading-relaxed">
+                Keeping players engaged is key. This section details features like daily rewards, quests, leaderboards, and exciting limited-time events. It also touches upon the game's visual direction.
+            </p>
+            <h2 class="text-2xl font-semibold mb-2 pb-1">Engagement & Retention</h2>
+            <ul class="list-disc list-inside space-y-1 pl-4">
+                <li><strong>Daily Login Rewards:</strong> Small currency bonus, chance for a small boost.</li>
+                <li><strong>Daily/Weekly Quests:</strong> Tasks like "Upgrade 5 artifacts." Rewards currency or boosts.</li>
+                <li><strong>Collection Bonuses:</strong> Completing artifact sets gives permanent income boosts or currency.</li>
+                <li><strong>Leaderboards:</strong> Top museums by Star Rating/value, Richest Players, Most Rebirths.</li>
+                <li><strong>Social:</strong> Visit other players' museums (read-only).</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold mt-4">Limited-Time Events (Revised)</h3>
+            <div class="space-y-4">
+                <div class="accordion">
+                    <button class="accordion-header w-full text-left px-4 py-3 rounded-md shadow font-semibold flex justify-between items-center">
+                        Event Type 1: "Curator's Collection Challenge"
+                        <span class="accordion-icon transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content hidden p-4 mt-1 rounded-md shadow-inner">
+                        <p><strong>Concept:</strong> Visitors drop special event items (e.g., "Ancient Papyrus Scraps"). Players collect and turn them into an Event Master NPC for "Event Favor Points."</p>
+                        <p><strong>Progression & Goals:</strong> Daily tasks and tiered milestone rewards (event decor, in-game accessories, free UGC avatar items like "Sacred Scarab Shoulder Pal," "Pharaoh's Event Headdress," "Wings of Horus").</p>
+                    </div>
+                </div>
+                <div class="accordion">
+                    <button class="accordion-header w-full text-left px-4 py-3 rounded-md shadow font-semibold flex justify-between items-center">
+                        Event Type 2: "Museum Helper Initiative"
+                        <span class="accordion-icon transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content hidden p-4 mt-1 rounded-md shadow-inner">
+                        <p><strong>Concept:</strong> Players visit other museums and perform helpful actions (e.g., "Polish Artifact," "Water Plants") to earn "Community Spirit Tokens."</p>
+                        <p><strong>Progression & Goals:</strong> Daily tasks and tiered milestone rewards (event decor, in-game accessories, free UGC avatar items like "Community Ankh Necklace," "Guardian's Staff").</p>
+                        <p><strong>Incentive for Being Helped:</strong> Small temporary income boost or "Gratitude Tokens."</p>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="text-2xl font-semibold mt-6 mb-2 pb-1">Visuals & Theme</h2>
+            <ul class="list-disc list-inside space-y-1 pl-4">
+                <li>Bright, appealing, and distinctly Egyptian.</li>
+                <li>Artifact models are recognizable (even if simplified) and look cooler with upgrades.</li>
+                <li>Museum building is satisfying to expand.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="bg-amber-700 text-amber-100 text-center p-4 mt-12">
+        <p>&copy; 2025 Pharaoh's Legacy Museum Builder - GDD</p>
+    </footer>
+
+    <script>
+        const sections = document.querySelectorAll('.content-section');
+        const navItems = document.querySelectorAll('.nav-item');
+        const accordions = document.querySelectorAll('.accordion');
+
+        function showSection(sectionId) {
+            sections.forEach(section => {
+                if (section.id === sectionId) {
+                    section.classList.remove('hidden');
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+            navItems.forEach(item => {
+                if (item.getAttribute('onclick').includes(sectionId)) {
+                    item.classList.add('tab-active');
+                    item.classList.remove('tab-inactive');
+                } else {
+                    item.classList.remove('tab-active');
+                    item.classList.add('tab-inactive');
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        accordions.forEach(accordion => {
+            const header = accordion.querySelector('.accordion-header');
+            const content = accordion.querySelector('.accordion-content');
+            const icon = accordion.querySelector('.accordion-icon');
+
+            header.addEventListener('click', () => {
+                const isVisible = !content.classList.contains('hidden');
+                // Close all other accordions in the same parent group if needed
+                // accordions.forEach(otherAccordion => {
+                //     if (otherAccordion !== accordion) {
+                //        otherAccordion.querySelector('.accordion-content').classList.add('hidden');
+                //        otherAccordion.querySelector('.accordion-icon').classList.remove('rotate-180');
+                //     }
+                // });
+
+                content.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+        
+        // Default to overview section
+        showSection('overview');
+    </script>
+
+</body>
+</html>
